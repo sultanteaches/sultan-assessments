@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en" style="--exam-base-font-size: 13px; --exam-line-height: 1.34; --exam-q-margin: 5px; --exam-ms-font-size: 12px;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Physics Ch 6 (Electromagnetic Induction) Advanced Assessment & Security Suite</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome 6 CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- QRCode.js CDN for Vector Codes -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
+
+    :root {
+      --serif-board: 'Merriweather', 'Crimson Pro', 'Times New Roman', Georgia, serif;
+      --sans-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono-code: 'JetBrains Mono', monospace;
+      --exam-base-font-size: 13px;
+      --exam-line-height: 1.34;
+      --exam-q-margin: 5px;
+      --exam-ms-font-size: 12px;
+    }
+
+    body {
+      font-family: var(--sans-ui);
+      background-color: #0b0f19;
+      color: #0f172a;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .viewport-canvas {
+      min-height: calc(100vh - 100px);
+      padding: 16px 12px 80px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: radial-gradient(circle at 50% 15%, #1e293b 0%, #0b0f19 100%);
+      overflow-x: auto;
+    }
+
+    .paper-zoom-container {
+      transform-origin: top center;
+      transition: transform 0.15s ease-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      width: 100%;
+    }
+
+    /* Standard A4 Paper Simulation */
+    .exam-sheet {
+      font-family: var(--serif-board);
+      background-color: #ffffff;
+      color: #000000;
+      width: 210mm;
+      max-width: 210mm;
+      min-height: 297mm;
+      height: auto;
+      box-sizing: border-box;
+      padding: 8mm 12mm 8mm 12mm;
+      box-shadow: 0 18px 40px -5px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.15);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .exam-sheet.auto-height {
+      min-height: 297mm;
+      height: auto;
+      overflow: visible;
+    }
+
+    /* Microprinting Security Rule */
+    .microprint-rule {
+      font-size: 3.8px !important;
+      line-height: 4px !important;
+      letter-spacing: 0.35px !important;
+      font-family: var(--mono-code);
+      text-transform: uppercase;
+      color: #0f172a;
+      overflow: hidden;
+      white-space: nowrap;
+      user-select: none;
+      margin: 3px 0;
+      display: block;
+      opacity: 0.85;
+    }
+
+    /* Void Pantograph Anti-Copy Mesh Background */
+    .pantograph-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      user-select: none;
+      z-index: 1;
+      opacity: 0.035;
+      background-image: 
+        radial-gradient(#000000 0.75px, transparent 0.75px),
+        repeating-linear-gradient(45deg, rgba(0,0,0,0.06) 0, rgba(0,0,0,0.06) 1px, transparent 0, transparent 16px);
+      background-size: 8px 8px, 32px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .pantograph-warning {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: 0.3em;
+      color: #000000;
+      transform: rotate(-32deg);
+      text-transform: uppercase;
+      font-family: var(--sans-ui);
+      opacity: 0.7;
+    }
+
+    /* Diagonal Watermark Layer */
+    .watermark-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      user-select: none;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      opacity: 0.045;
+      transform: rotate(-28deg) scale(1.15);
+      overflow: hidden;
+    }
+
+    .watermark-line {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      white-space: nowrap;
+      color: #000000;
+      text-transform: uppercase;
+      font-family: var(--sans-ui);
+    }
+
+    .sheet-body {
+      flex: 1 1 auto;
+      position: relative;
+      z-index: 3;
+    }
+
+    .section-banner {
+      background-color: #f8fafc;
+      border-top: 1.5px solid #000;
+      border-bottom: 1.5px solid #000;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 11px;
+      padding: 2px 6px;
+      margin: 6px 0 4px 0;
+      text-align: center;
+      letter-spacing: 0.05em;
+    }
+
+    .question-block {
+      font-size: var(--exam-base-font-size, 13px);
+      line-height: var(--exam-line-height, 1.34);
+      margin-bottom: var(--exam-q-margin, 5px);
+      text-align: justify;
+      break-inside: avoid;
+      padding-bottom: 4px;
+      border-bottom: 1px dotted #cbd5e1;
+      color: #050505;
+    }
+    .question-block:last-child {
+      border-bottom: none;
+    }
+
+    .q-badge {
+      font-weight: 700;
+      margin-right: 4px;
+      color: #000000;
+    }
+
+    .marks-pill {
+      float: right;
+      font-weight: 700;
+      font-size: 0.95em;
+      margin-left: 8px;
+      color: #000000;
+    }
+
+    .mcq-options {
+      margin-top: 3px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px 12px;
+      font-size: 0.95em;
+    }
+
+    .or-divider {
+      text-align: center;
+      font-weight: 700;
+      font-size: 10.5px;
+      margin: 4px 0;
+      position: relative;
+    }
+    .or-divider::before, .or-divider::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 42%;
+      height: 1px;
+      background: #000;
+    }
+    .or-divider::before { left: 0; }
+    .or-divider::after { right: 0; }
+
+    .step-mark-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 3px;
+      padding: 1px 4px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.2;
+    }
+
+    /* Marking scheme table */
+    .ms-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--serif-board);
+      font-size: var(--exam-ms-font-size, 12px);
+      line-height: 1.32;
+      color: #000000;
+    }
+    .ms-table th, .ms-table td {
+      border: 1px solid #000;
+      padding: 4px 7px;
+      vertical-align: top;
+    }
+    .ms-table th {
+      background-color: #f1f5f9;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: #000000;
+    }
+    .ms-table tr {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    /* Scannable Security QR block */
+    .qr-security-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1.5px solid #000000;
+      padding: 3px 5px;
+      background: #ffffff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .qr-security-box:hover {
+      background: #f8fafc;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    .qr-canvas-holder {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+    }
+    .qr-canvas-holder img, .qr-canvas-holder canvas {
+      width: 44px !important;
+      height: 44px !important;
+      image-rendering: pixelated;
+    }
+
+    [contenteditable="true"]:focus {
+      outline: 1.5px solid #3b82f6;
+      background-color: rgba(59, 130, 246, 0.05);
+      border-radius: 2px;
+    }
+
+    /* Customer Mode Notification Banner */
+    .customer-banner {
+      background: linear-gradient(90deg, #1e3a8a 0%, #0f172a 100%);
+      border-bottom: 2px solid #38bdf8;
+    }
+
+    /* Print styles */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 7mm 10mm;
+      }
+      html, body {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .viewport-canvas {
+        padding: 0 !important;
+        margin: 0 !important;
+        background: none !important;
+        display: block !important;
+      }
+      .paper-zoom-container {
+        transform: none !important;
+        gap: 0 !important;
+        display: block !important;
+      }
+      .exam-sheet {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 100vh !important;
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        page-break-inside: avoid !important;
+        page-break-after: always !important;
+        break-after: page !important;
+      }
+      .exam-sheet:last-of-type {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================== -->
+  <!-- 1. CUSTOMER POST-CHECKOUT DOWNLOAD BAR    -->
+  <!-- ========================================== -->
+  <div id="customerHeaderBar" class="no-print hidden customer-banner text-white shadow-2xl sticky top-0 z-50 px-4 py-3">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-400 text-lg">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="font-bold text-sm text-white">Payment Confirmed — Instant Delivery</h2>
+            <span id="custLicenseBadge" class="bg-blue-600/80 text-sky-200 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-blue-400/40">
+              LIC-AUTOPAY-2026
+            </span>
+          </div>
+          <p class="text-xs text-slate-300">
+            Issued to: <strong id="custRecipientName" class="text-amber-300">Valued Customer</strong> • Individual Watermark Active
+          </p>
+        </div>
+      </div>
+
+      <!-- Customer Action Controls -->
+      <div class="flex items-center gap-2">
+        <div class="bg-slate-900/90 border border-slate-700 rounded-lg p-0.5 text-xs flex">
+          <button id="custBtnQP" onclick="switchMainView('qp')" class="px-2.5 py-1 rounded font-bold transition bg-blue-600 text-white">
+            Question Paper
+          </button>
+          <button id="custBtnMS" onclick="switchMainView('ms')" class="px-2.5 py-1 rounded font-medium text-slate-300 hover:text-white transition">
+            Marking Scheme
+          </button>
+          <button id="custBtnBoth" onclick="switchMainView('both')" class="px-2.5 py-1 rounded font-medium text-slate-300 hover:text-white transition">
+            Full Package (Both)
+          </button>
+        </div>
+
+        <button onclick="triggerInstantCustomerDownload()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-lg transition flex items-center gap-2 shadow-lg shadow-emerald-900/40 animate-pulse">
+          <i class="fa-solid fa-file-arrow-down text-sm"></i>
+          <span>Save / Download PDF</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 2. ADMIN MASTER COMMAND BAR               -->
+  <!-- ========================================== -->
+  <header id="adminHeaderBar" class="no-print sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md text-white border-b border-slate-700 shadow-xl">
+    <div class="max-w-7xl mx-auto px-3 py-1.5 flex flex-wrap items-center justify-between gap-2">
+      
+      <div class="flex items-center space-x-2">
+        <span class="font-bold text-xs text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+          <i class="fa-solid fa-shield-halved text-emerald-400"></i> Physics Ch 6 (EMI) Assessment
+        </span>
+        <div class="h-4 w-px bg-slate-700 mx-1"></div>
+        <div id="setTabContainer" class="flex items-center space-x-1"></div>
+      </div>
+
+      <div class="flex items-center bg-slate-800 border border-slate-700 rounded-lg px-2 py-0.5 space-x-1.5 text-xs">
+        <span class="text-slate-400 font-semibold text-[11px] flex items-center gap-1">
+          <i class="fa-solid fa-dice-d20 text-sky-400"></i> Seed:
+        </span>
+        <select id="seedSelector" onchange="changeNumericalSeed(this.value)" class="bg-slate-900 text-amber-300 font-mono font-bold text-xs border border-slate-700 rounded px-1.5 py-0.5 focus:outline-none">
+          <option value="1">Seed A (k=1)</option>
+          <option value="2">Seed B (k=2)</option>
+          <option value="3">Seed C (k=3)</option>
+        </select>
+      </div>
+
+      <div class="flex items-center bg-slate-800 border border-slate-700 rounded-lg p-0.5 text-xs">
+        <button id="viewBtnQP" onclick="switchMainView('qp')" class="px-3 py-1 rounded font-bold transition bg-blue-600 text-white shadow-sm flex items-center gap-1">
+          <i class="fa-solid fa-file-lines"></i> Question Paper
+        </button>
+        <button id="viewBtnMS" onclick="switchMainView('ms')" class="px-3 py-1 rounded font-medium text-slate-300 hover:text-white transition flex items-center gap-1">
+          <i class="fa-solid fa-clipboard-check"></i> Marking Scheme
+        </button>
+      </div>
+
+      <div class="flex items-center space-x-1.5">
+        <button onclick="openSecurityModal()" class="px-2.5 py-1 text-xs font-bold rounded bg-amber-500/20 border border-amber-400/40 text-amber-300 hover:bg-amber-500/30 transition flex items-center gap-1.5 shadow-sm">
+          <i class="fa-solid fa-shield-cat"></i>
+          <span>Security & Links</span>
+        </button>
+      </div>
+
+      <div class="flex items-center bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 space-x-1.5 text-xs">
+        <span class="text-slate-400 font-semibold text-[11px]">Font:</span>
+        <button onclick="adjustFontSize(-0.5)" class="w-5 h-5 flex items-center justify-center rounded hover:bg-slate-700 text-slate-200">
+          <i class="fa-solid fa-minus text-[9px]"></i>
+        </button>
+        <span id="fontSizeDisplay" class="font-mono font-bold text-amber-300 text-[11px] w-10 text-center">13px</span>
+        <button onclick="adjustFontSize(0.5)" class="w-5 h-5 flex items-center justify-center rounded hover:bg-slate-700 text-slate-200">
+          <i class="fa-solid fa-plus text-[9px]"></i>
+        </button>
+      </div>
+
+      <div class="flex items-center bg-slate-800 border border-slate-700 rounded-lg px-1.5 py-1 space-x-1 text-xs">
+        <button onclick="adjustZoom(-0.1)" class="w-5 h-5 flex items-center justify-center rounded hover:bg-slate-700 text-slate-200">
+          <i class="fa-solid fa-minus text-[9px]"></i>
+        </button>
+        <span id="zoomReadout" class="w-10 text-center font-mono font-bold text-amber-300 text-xs">100%</span>
+        <button onclick="adjustZoom(0.1)" class="w-5 h-5 flex items-center justify-center rounded hover:bg-slate-700 text-slate-200">
+          <i class="fa-solid fa-plus text-[9px]"></i>
+        </button>
+        <button onclick="fitZoomWidth()" class="px-1.5 h-5 flex items-center justify-center rounded bg-slate-700/70 text-amber-300 text-[10px]">Fit</button>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <button id="editToggleBtn" onclick="toggleLiveEdit()" class="px-2 py-1 rounded font-bold text-xs bg-emerald-600 text-white transition flex items-center gap-1 shadow-sm">
+          <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Edit: ON
+        </button>
+        <button onclick="window.print()" class="px-3 py-1 text-xs font-bold rounded bg-blue-600 hover:bg-blue-500 text-white transition flex items-center gap-1 shadow">
+          <i class="fa-solid fa-print"></i> Print / PDF
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- VIEWPORT -->
+  <main class="viewport-canvas" id="viewportCanvas">
+    <div class="paper-zoom-container" id="paperZoomContainer">
+      <div id="qpRenderContainer" class="flex flex-col items-center gap-6 w-full"></div>
+      <div id="msRenderContainer" class="flex flex-col items-center gap-6 w-full hidden"></div>
+    </div>
+  </main>
+
+  <!-- ANTI-PIRACY SECURITY & LINK GENERATOR MODAL -->
+  <div id="securityModal" class="no-print fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-xl max-w-2xl w-full p-5 text-white shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center space-x-2">
+          <div class="w-9 h-9 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-lg">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-sm text-white">Security &amp; Automated Buyer Link Generator</h3>
+            <p class="text-[11px] text-slate-400">Cryptographic Signing &amp; Gateway Redirect URLs</p>
+          </div>
+        </div>
+        <button onclick="closeSecurityModal()" class="text-slate-400 hover:text-white p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="bg-slate-950/70 border border-slate-800 rounded-lg p-3 text-xs space-y-2">
+        <h4 class="font-bold text-amber-300">Automated Post-Payment Redirect Links</h4>
+        <p class="text-[11px] text-slate-300 leading-relaxed">
+          Copy and paste these exact redirect URLs into your payment gateway (Razorpay / Instamojo). The buyer will be redirected here with instant PDF rendering:
+        </p>
+
+        <div class="space-y-2 pt-2">
+          <div>
+            <span class="text-[10px] text-slate-400 font-bold block">1. Question Paper Only (₹10) Redirect URL:</span>
+            <div id="linkOutputQP" class="bg-slate-900 border border-slate-700 p-2 rounded text-[10px] font-mono text-emerald-400 break-all select-all"></div>
+          </div>
+          <div>
+            <span class="text-[10px] text-slate-400 font-bold block">2. Marking Scheme Only (₹10) Redirect URL:</span>
+            <div id="linkOutputMS" class="bg-slate-900 border border-slate-700 p-2 rounded text-[10px] font-mono text-emerald-400 break-all select-all"></div>
+          </div>
+          <div>
+            <span class="text-[10px] text-slate-400 font-bold block">3. Full Combo Package (₹20) Redirect URL:</span>
+            <div id="linkOutputBoth" class="bg-slate-900 border border-slate-700 p-2 rounded text-[10px] font-mono text-emerald-400 break-all select-all"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end pt-2 border-t border-slate-800">
+        <button onclick="closeSecurityModal()" class="px-4 py-1.5 rounded text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow">
+          Close
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    /**
+     * ========================================================
+     * SECURITY & ACCESS TOKEN CONFIGURATION
+     * Change SECRET_ACCESS_TOKEN to your own secret key phrase
+     * ========================================================
+     */
+    const SECRET_ACCESS_TOKEN = "SultanSecret2026";
+
+    const CHAPTER_6_SEEDED_DATA = {
+      1: {
+        set1: {
+          name: "Set 1",
+          code: "55/6/1",
+          series: "PHY-EMI-PREM",
+          timeAllowed: "1 Hour (60 Mins)",
+          maxMarks: 25,
+          sections: [
+            {
+              title: "SECTION A (1 Mark each)",
+              type: "1M",
+              questions: [
+                {
+                  qNum: 1,
+                  marks: 1,
+                  text: "The planar sensing coil of an induction hob has an effective area of 100 cm² and is oriented such that its surface makes an angle of 30° with a uniform high-frequency magnetic field of magnitude 0.20 T. The magnetic flux linked with the sensing coil is:",
+                  options: ["(a) 1.0 × 10⁻³ Wb", "(b) 1.73 × 10⁻³ Wb", "(c) 2.0 × 10⁻³ Wb", "(d) 3.46 × 10⁻³ Wb"],
+                  solution: "Magnetic flux Φ = B · A · cos θ, where θ is the angle between the normal (area vector) and the magnetic field vector B⃗. Given that the plane of the coil makes 30° with B⃗, the angle made by the normal is θ = 90° − 30° = 60°. Area A = 100 cm² = 0.01 m². Φ = (0.20 T) × (0.01 m²) × cos 60° = 0.20 × 0.01 × 0.5 = 1.0 × 10⁻³ Wb.",
+                  stepMarks: "Angle θ = 60° (½ M) + Calculation & option (a) (½ M)",
+                  finalAnswer: "Correct Option: (a) 1.0 × 10⁻³ Wb"
+                },
+                {
+                  qNum: 2,
+                  marks: 1,
+                  text: "An inductive vehicle sensor coil buried horizontally beneath an asphalt roadway carries a steady current. When a massive steel chassis of an automobile drives directly over the loop, the self-inductance of the buried coil instantaneously increases. The direction of the induced electromotive force developed in the coil acts to:",
+                  options: [
+                    "(a) Oppose the existing current in the coil",
+                    "(b) Aid the existing current in the coil",
+                    "(c) Remain zero as velocity is constant",
+                    "(d) Cause a continuous steady DC potential"
+                  ],
+                  solution: "By definition, magnetic flux linkage is Φ = L I. When the ferromagnetic car chassis passes over the coil, the inductance L increases, causing the flux Φ to increase even if current I were initially constant. According to Lenz's law, the induced emf opposes the growth in flux linkage, thereby inducing a back emf that opposes the existing current.",
+                  stepMarks: "Lenz's law flux opposition (½ M) + Option (a) (½ M)",
+                  finalAnswer: "Correct Option: (a) Oppose the existing current in the coil"
+                },
+                {
+                  qNum: 3,
+                  marks: 1,
+                  text: "A helicopter has horizontal rotor blades of length 4.0 m rotating at 300 rpm in a region where the vertical component of Earth's magnetic field is 0.50 × 10⁻⁴ T. The magnitude of the motional electromotive force developed between the central rotor hub and the blade tip is:",
+                  options: ["(a) 6.28 mV", "(b) 12.56 mV", "(c) 25.12 mV", "(d) 3.14 mV"],
+                  solution: "Angular speed ω = 2π ν = 2π × (300 / 60) = 10π rad/s ≈ 31.42 rad/s. Length of blade l = 4.0 m. Vertical magnetic field B = 0.50 × 10⁻⁴ T. Induced motional emf across a rotating rod: ε = ½ B ω l² = ½ × (0.50 × 10⁻⁴ T) × (10π rad/s) × (4.0 m)² = 0.25 × 10⁻⁴ × 10π × 16 = 40π × 10⁻⁴ V = 1.256 × 10⁻² V = 12.56 mV.",
+                  stepMarks: "Formula ε = ½ B ω l² (½ M) + Option (b) (½ M)",
+                  finalAnswer: "Correct Option: (b) 12.56 mV"
+                },
+                {
+                  qNum: 4,
+                  marks: 1,
+                  text: "The inductive choke ballast of a fluorescent tube light has a self-inductance of 2.5 H. When the starter switch abruptly interrupts a steady current of 2.0 A in a time interval of 1.0 ms, the magnitude of the high voltage 'inductive kick' induced across the choke is:",
+                  options: ["(a) 500 V", "(b) 2500 V", "(c) 5000 V", "(d) 1250 V"],
+                  solution: "|ε| = L |ΔI / Δt| = 2.5 H × [(2.0 A − 0) / (1.0 × 10⁻³ s)] = 2.5 × 2000 = 5000 V = 5.0 kV.",
+                  stepMarks: "|ε| = L (ΔI/Δt) (½ M) + Option (c) (½ M)",
+                  finalAnswer: "Correct Option: (c) 5000 V"
+                },
+                {
+                  qNum: 5,
+                  marks: 1,
+                  isAR: true,
+                  text: "For Question 5, two statements are given — one labelled Assertion (A) and the other labelled Reason (R). Select the correct answer from the codes (a), (b), (c) and (d):\n\nAssertion (A): During regenerative braking in electric locomotives, the drive motor acts as a generator and experiences an opposing magnetic retarding torque in accordance with Lenz's law.\nReason (R): Lenz's law is a direct operational manifestation of the law of conservation of mechanical and electrical energy.",
+                  options: [
+                    "(a) Both (A) and (R) are true and (R) is the correct explanation of (A).",
+                    "(b) Both (A) and (R) are true but (R) is not the correct explanation of (A).",
+                    "(c) (A) is true but (R) is false.",
+                    "(d) Both (A) and (R) are false."
+                  ],
+                  solution: "When the traction motor functions as a generator, the induced current produces an opposing Lorentz force (retarding torque) on the rotor as per Lenz's law. The mechanical kinetic energy of the moving train is converted into electrical energy stored back in the battery / catenary. If there were no opposing torque, energy would be created from nothing, violating conservation of energy. Hence, (R) correctly explains (A).",
+                  stepMarks: "Physical validity & causality (½ M) + Option (a) (½ M)",
+                  finalAnswer: "Correct Option: (a)"
+                }
+              ]
+            },
+            {
+              title: "SECTION B (2 Marks each)",
+              type: "2M",
+              questions: [
+                {
+                  qNum: 6,
+                  marks: 2,
+                  text: "An induction cooktop works on the principle of electromagnetic induction. (a) Explain briefly why a high-frequency alternating current is passed through the induction coil beneath the ceramic cooking plate. (b) Why does the cooking vessel heat up rapidly while the ceramic cooktop surface itself does not generate heat directly?",
+                  solution: "(a) A high-frequency alternating current produces a rapidly changing magnetic field perpendicular to the base of the pan. By Faraday's law of electromagnetic induction, this creates substantial circulating eddy currents of high magnitude within the metallic base. [1 Mark]\n(b) The pan is made of a ferromagnetic metal (like cast iron or stainless steel) having electrical resistance, so the high circulating eddy currents produce intense Joule heating (I²Rt). In contrast, the ceramic cooktop is an electrical insulator; no eddy currents can flow through it, so it does not produce heat directly (it only warms secondary to contact with the hot vessel). [1 Mark]",
+                  stepMarks: "Rapid flux & eddy currents (1 M) + Joule heat vs insulator (1 M)",
+                  finalAnswer: "(a) Produces high eddy currents; (b) Pan dissipates Joule heat, ceramic is insulating."
+                },
+                {
+                  qNum: 7,
+                  marks: 2,
+                  text: "A commercial jet airliner having a metallic wingspan of 60 m flies horizontally due West at a constant cruising speed of 720 km/h in the Northern Hemisphere, where the vertical component of Earth's magnetic field is B_V = 4.0 × 10⁻⁵ T pointing vertically downwards. (a) Calculate the potential difference developed between the wingtips. (b) State, with physical justification, which wingtip (North or South) attains a higher electrical potential.",
+                  solution: "(a) Cruising speed v = 720 km/h = 720 × (5/18) m/s = 200 m/s. Wingspan l = 60 m. Since the plane flies horizontally, only the vertical component of the magnetic field B_V is perpendicular to both velocity and length.\nInduced motional emf ε = B_V · l · v = (4.0 × 10⁻⁵ T) × (60 m) × (200 m/s) = 4.0 × 10⁻⁵ × 12000 = 0.48 V = 480 mV. [1 Mark]\n(b) Velocity v⃗ is directed West, and magnetic field B⃗ is directed downward into the Earth. By Fleming's Right-Hand Rule (or Lorentz force F⃗ = q(v⃗ × B⃗) on positive test charges), the magnetic force acts towards the North. Consequently, positive charge accumulates at the northern wingtip. Hence, the Northern wingtip is at a higher electrical potential. [1 Mark]",
+                  stepMarks: "Formula ε = 0.48 V (1 M) + Fleming's rule polarity North (1 M)",
+                  finalAnswer: "(a) ε = 0.48 V; (b) Northern wingtip is at higher potential."
+                },
+                {
+                  qNum: 8,
+                  marks: 2,
+                  hasOr: true,
+                  text: "A wireless smartphone charging pad contains a primary transmitter coil that creates a time-varying magnetic field. (a) Define 'Mutual Inductance' between two coupled coils and state its SI unit. (b) If the current in the transmitter coil changes at a steady rate of 4.0 × 10⁴ A/s and an average emf of 6.0 V is induced in the receiver coil of the smartphone, calculate the coefficient of mutual inductance between the two coils.",
+                  orText: "In modern high-speed trains, electromagnetic eddy current track brakes are employed during emergency stops. (a) Explain the physical mechanism by which eddy currents decelerate the train without any mechanical contact or friction. (b) Why do these electromagnetic brakes become progressively less effective as the train's speed approaches zero?",
+                  solution: "Main Question:\n(a) Mutual inductance is defined as the magnetic flux linked with the secondary coil per unit electric current flowing through the primary coil (Φ₂ = M I₁), or the magnitude of induced electromotive force produced in the secondary coil per unit time rate of change of current in the primary coil (M = |ε₂| / (dI₁/dt)). SI unit: Henry (H) or V·s·A⁻¹. [1 Mark]\n(b) |ε₂| = M (dI₁/dt) ⟹ M = |ε₂| / (dI₁/dt) = 6.0 V / (4.0 × 10⁴ A/s) = 1.5 × 10⁻⁴ H = 0.15 mH = 150 μH. [1 Mark]\n\nOR Option:\n(a) When strong electromagnets on the train chassis are energized above the conducting steel rails, the relative motion causes a rapid change in magnetic flux through localized regions of the rail. According to Faraday's law and Lenz's law, strong eddy currents are induced in the rail which exert an opposing magnetic Lorentz force on the train's electromagnets, smoothly decelerating the train. [1 Mark]\n(b) Motional emf and the rate of flux change are directly proportional to the train's instantaneous velocity (ε ∝ v). As the train slows down (v → 0), the induced eddy currents diminish towards zero, and the opposing magnetic braking force vanishes. [1 Mark]",
+                  stepMarks: "Main: Definition (1 M) + M = 0.15 mH (1 M). OR: Eddy Lorentz force (1 M) + Speed dependence ε ∝ v (1 M)",
+                  finalAnswer: "Main: SI unit Henry; M = 0.15 mH. OR: Non-contact Lorentz opposing force; vanishes as v → 0."
+                }
+              ]
+            },
+            {
+              title: "SECTION C (3 Marks each)",
+              type: "3M",
+              questions: [
+                {
+                  qNum: 9,
+                  marks: 3,
+                  text: "A conducting metal crossbar PQ of length l and electrical resistance R slides smoothly with constant velocity v⃗ on two parallel, horizontal, frictionless rails connected to a load resistor in a uniform vertical magnetic field B. (a) Derive an expression for the motional emf induced across the bar. (b) Deduce the mechanical power that an external agency must supply to pull the bar at constant speed. (c) Demonstrate that this mechanical power is identically equal to the rate of Joule thermal dissipation in the circuit, and state the governing physical law.",
+                  solution: "(a) Let the bar displace by dx = v dt in time interval dt. The change in enclosed area is dA = l dx = l v dt. Change in magnetic flux linked with the circuit dΦ = B dA = B l v dt. By Faraday's law of induction, induced emf |ε| = dΦ/dt = B l v. [1 Mark]\n(b) Induced current in the loop of total resistance R is I = ε / R = (B l v) / R. The magnetic Lorentz force on the conductor is F_m = I l B = [(B l v) / R] l B = (B² l² v) / R, directed opposite to velocity v⃗. To maintain constant speed, an equal external force F_ext must be applied. Mechanical power delivered: P_mech = F_ext · v = (B² l² v²) / R. [1 Mark]\n(c) The rate of thermal energy dissipation as Joule heat is: P_thermal = I² R = [(B l v) / R]² · R = (B² l² v²) / R. Since P_mech = P_thermal, mechanical energy supplied is fully converted into electrical/thermal energy, directly validating the Law of Conservation of Energy. [1 Mark]",
+                  stepMarks: "Derivation ε = Blv (1 M) + Power P_mech (1 M) + P_mech = I²R conservation (1 M)",
+                  finalAnswer: "ε = B l v; P_mech = P_thermal = (B² l² v²) / R (Conservation of Energy)."
+                },
+                {
+                  qNum: 10,
+                  marks: 3,
+                  text: "An airport luggage security scanner uses a rectangular search coil of dimensions 20 cm × 5 cm with a small gap, exiting a localized uniform inspection magnetic field of 0.40 T at a steady speed of 5.0 cm/s. Calculate the magnitude of the induced electromotive force and the duration for which this emf lasts when the coil emerges: (a) along its shorter side (cutting length 20 cm), and (b) along its longer side (cutting length 5 cm).",
+                  solution: "(a) Emerging along the shorter side: The active conductor cutting the magnetic field lines is the longer side l₁ = 20 cm = 0.20 m. Distance to travel out of the field is the shorter side d₁ = 5 cm = 0.05 m. Speed v = 5.0 cm/s = 0.05 m/s.\nInduced emf ε₁ = B · l₁ · v = (0.40 T) × (0.20 m) × (0.05 m/s) = 4.0 × 10⁻³ V = 4.0 mV. Duration t₁ = d₁ / v = 0.05 m / 0.05 m/s = 1.0 s. [1½ Marks]\n(b) Emerging along the longer side: Active length cutting field lines is the shorter side l₂ = 5 cm = 0.05 m. Distance to travel out of the field is d₂ = 20 cm = 0.20 m.\nInduced emf ε₂ = B · l₂ · v = (0.40 T) × (0.05 m) × (0.05 m/s) = 1.0 × 10⁻³ V = 1.0 mV. Duration t₂ = d₂ / v = 0.20 m / 0.05 m/s = 4.0 s. [1½ Marks]",
+                  stepMarks: "Part (a): ε₁ = 4.0 mV, t₁ = 1.0 s (1½ M) + Part (b): ε₂ = 1.0 mV, t₂ = 4.0 s (1½ M)",
+                  finalAnswer: "(a) ε₁ = 4.0 mV, t₁ = 1.0 s; (b) ε₂ = 1.0 mV, t₂ = 4.0 s."
+                },
+                {
+                  qNum: 11,
+                  marks: 3,
+                  hasOr: true,
+                  text: "An automobile ignition coil utilizes mutual induction between two coaxial solenoids to generate high-voltage sparks for the engine cylinders. (a) Derive an expression for the mutual inductance M of two long coaxial solenoids S₁ and S₂ of length l, radii r₁ and r₂ (r₁ < r₂), having total turns N₁ and N₂ respectively. (b) If the primary solenoid current drops from 5.0 A to 0 in 0.50 ms and M = 0.80 H, find the peak voltage generated across the secondary coil to fire the spark plug.",
+                  orText: "(a) Derive the expression for the magnetic potential energy stored in an inductor of self-inductance L carrying current I. (b) A superconducting magnetic energy storage (SMES) coil of inductance 0.50 H carries a persistent current of 80 A. Calculate: (i) the magnetic energy stored in the magnetic field of the coil, and (ii) the average electromotive force induced if a circuit breaker quenches this current to zero in 40 ms.",
+                  solution: "Main Question:\n(a) Let current I₂ pass through the outer solenoid S₂. Magnetic field inside S₂ is B₂ = μ₀ (N₂ / l) I₂. [½ Mark]\nMagnetic flux linked with each turn of inner solenoid S₁ is Φ₁ per turn = B₂ A₁ = [μ₀ (N₂ / l) I₂] (π r₁²). Total flux linked with all N₁ turns of S₁ is: Φ_total = N₁ Φ₁ = [μ₀ N₁ N₂ π r₁² / l] · I₂. [1 Mark]\nBy definition Φ_total = M I₂, therefore: M = μ₀ N₁ N₂ π r₁² / l = μ₀ n₁ n₂ π r₁² l. [½ Mark]\n(b) Peak induced voltage across secondary: |ε₂| = M |ΔI₁ / Δt| = (0.80 H) × [5.0 A / (0.50 × 10⁻³ s)] = 0.80 × 10000 = 8000 V = 8.0 kV. [1 Mark]\n\nOR Option:\n(a) Work done against back emf dW = |ε| I dt = (L dI/dt) I dt = L I dI. Total energy stored: U = ∫₀ᴵ L I dI = ½ L I². [1½ Marks]\n(b) (i) Stored energy U = ½ L I² = ½ × (0.50 H) × (80 A)² = 0.25 × 6400 = 1600 J = 1.60 kJ. [¾ Mark]\n(ii) Average induced emf |ε| = L (ΔI / Δt) = (0.50 H) × (80 A / 0.040 s) = 0.50 × 2000 = 1000 V = 1.0 kV. [¾ Mark]",
+                  stepMarks: "Main: Field & flux derivation (2 M) + Spark voltage 8.0 kV (1 M). OR: Work integration (1½ M) + Energy 1.60 kJ (¾ M) + Emf 1000 V (¾ M)",
+                  finalAnswer: "Main: M = μ₀ N₁ N₂ π r₁² / l; ε = 8.0 kV. OR: U = 1.60 kJ; ε = 1000 V."
+                }
+              ]
+            },
+            {
+              title: "SECTION D (5 Marks Long Answer)",
+              type: "5M",
+              questions: [
+                {
+                  qNum: 12,
+                  marks: 5,
+                  hasOr: true,
+                  text: "(a) State the basic working principle of an AC generator. With the help of a neat, labelled schematic diagram, explain its working and derive an expression for the instantaneous electromotive force induced in an armature coil of N turns and area A rotating at constant angular speed ω in a uniform magnetic field B.\n(b) In a wind power installation, a rectangular generator coil of 500 turns, each of dimensions 20 cm × 15 cm, rotates at a steady speed of 1200 rpm in a uniform magnetic field of 0.25 T perpendicular to the rotation axis. Calculate:\n  (i) The maximum electromotive force generated by the coil.\n  (ii) The root-mean-square (rms) voltage delivered to the power conditioning unit.\n  (iii) If the external load resistance connected across the slip rings is 10 Ω, determine the peak electric current delivered.",
+                  orText: "(a) A metallic disc of radius R rotates with uniform angular velocity ω about its central axis in a uniform magnetic field B directed parallel to the axis of rotation. Derive an analytical expression for the electromotive force induced between the center and the metallic rim of the disc.\n(b) An experimental regenerative flywheel braking system employs a circular copper disc of radius 25 cm spun at 1800 rpm in a uniform axial magnetic field of 0.40 T.\n  (i) Calculate the potential difference induced between the axle and the periphery of the disc.\n  (ii) If a load resistor of 1.5 Ω is connected across sliding carbon brushes between the axle and rim, calculate the induced electric current.\n  (iii) Determine the opposing electromagnetic retarding torque exerted on the spinning disc.",
+                  solution: "Main Question:\n(a) Principle: Electromagnetic induction — when a closed conducting coil rotates in a magnetic field, the magnetic flux linked with it changes continuously, inducing an alternating emf. [1 Mark]\nWorking & Diagram: Neat sketch showing armature ABCD, field poles N-S, slip rings R₁, R₂, and carbon brushes B₁, B₂. [1 Mark]\nDerivation: Instantaneous flux Φ(t) = B A cos(ωt). For N turns, total flux Φ = N B A cos(ωt). By Faraday's law: ε = −dΦ/dt = −d/dt [N B A cos(ωt)] = N B A ω sin(ωt) = ε₀ sin(ωt), where ε₀ = N B A ω. [1 Mark]\n(b) Given: N = 500, Area A = 0.20 m × 0.15 m = 0.03 m², B = 0.25 T. Frequency ν = 1200 / 60 = 20 rev/s ⟹ ω = 2π ν = 40π rad/s ≈ 125.66 rad/s.\n(i) Peak emf ε₀ = N B A ω = 500 × (0.25 T) × (0.03 m²) × (40π rad/s) = 500 × 0.0075 × 125.66 = 3.75 × 125.66 = 471.24 V. [1 Mark]\n(ii) RMS voltage V_rms = ε₀ / √2 = 471.24 / 1.414 = 333.27 V. [½ Mark]\n(iii) Peak electric current I₀ = ε₀ / R = 471.24 V / 10 Ω = 47.12 A. [½ Mark]\n\nOR Option:\n(a) Consider an elemental concentric ring or radial strip dr at distance r from the center. The linear speed of this strip is v = ω r. The motional emf across this radial element is dε = B v dr = B (ω r) dr. Integrating from center (r = 0) to outer rim (r = R): ε = ∫₀ᴿ B ω r dr = ½ B ω R². [2 Marks]\n(b) (i) R = 0.25 m, B = 0.40 T, ω = 2π × (1800 / 60) = 60π rad/s ≈ 188.5 rad/s.\nInduced emf ε = ½ B ω R² = ½ × (0.40) × (60π) × (0.25)² = 0.20 × 188.5 × 0.0625 = 2.356 V. [1 Mark]\n(ii) Current drawn I = ε / R_load = 2.356 V / 1.5 Ω = 1.57 A. [1 Mark]\n(iii) Opposing magnetic torque on radial current: dτ = r dF = r (I dr B) = I B r dr. Total retarding torque τ = ∫₀ᴿ I B r dr = ½ I B R² = ½ × (1.57 A) × (0.40 T) × (0.25 m)² = 0.314 × 0.0625 = 0.0196 N·m ≈ 1.96 × 10⁻² N·m. [1 Mark]",
+                  stepMarks: "Main: Principle & diagram (2 M) + Derivation (1 M) + Peak emf 471.2 V (1 M) + Vrms & I₀ (1 M). OR: Disc derivation (2 M) + Emf 2.36 V (1 M) + Current 1.57 A (1 M) + Torque 0.0196 N·m (1 M)",
+                  finalAnswer: "Main: ε₀ = 471.2 V, V_rms = 333.3 V, I₀ = 47.1 A. OR: ε = 2.36 V, I = 1.57 A, τ = 1.96 × 10⁻² N·m."
+                }
+              ]
+            }
+          ]
+        }
+      }
+    };
+
+    let appState = {
+      isCustomerMode: false,
+      activeSeed: 1,
+      activeSet: 'set1',
+      activeView: 'qp',
+      purchasedView: 'both',
+      zoom: 1.0,
+      baseFontSize: 13,
+      isEditMode: false,
+      watermarkEnabled: true,
+      pantographEnabled: true,
+      securityToken: 'AUTH-PHY-EMI-9842F1-2026',
+      authorName: 'Sultan Teaches Physics',
+      recipientId: 'LIC-AUTHORIZED-2026',
+      buyerName: 'Valued Student',
+      orderId: 'ORD-98421'
+    };
+
+    function encodeInvisibleString(str) {
+      const binary = str.split('').map(char => 
+        char.charCodeAt(0).toString(2).padStart(8, '0')
+      ).join('');
+      return binary.split('').map(b => b === '0' ? '\u200B' : '\u200C').join('');
+    }
+
+    function switchMainView(view) {
+      // Security enforcement: block viewing marking scheme if only question paper was bought
+      if (appState.isCustomerMode && appState.purchasedView === 'qp' && (view === 'ms' || view === 'both')) {
+        alert("Your ₹10 license is for the Model Question Paper only. Please get the Evaluator Key license to view the step-by-step marking scheme.");
+        return;
+      }
+
+      appState.activeView = view;
+      const qp = document.getElementById('qpRenderContainer');
+      const ms = document.getElementById('msRenderContainer');
+
+      if (view === 'qp') {
+        qp.classList.remove('hidden');
+        ms.classList.add('hidden');
+      } else if (view === 'ms') {
+        qp.classList.add('hidden');
+        ms.classList.remove('hidden');
+      } else if (view === 'both') {
+        qp.classList.remove('hidden');
+        ms.classList.remove('hidden');
+      }
+
+      ['viewBtnQP', 'viewBtnMS', 'custBtnQP', 'custBtnMS', 'custBtnBoth'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        if ((id.includes('QP') && view === 'qp') || (id.includes('MS') && view === 'ms') || (id.includes('Both') && view === 'both')) {
+          btn.className = btn.className.replace(/text-slate-300|bg-slate-800/g, '') + " bg-blue-600 text-white font-bold";
+        } else {
+          btn.className = btn.className.replace(/bg-blue-600|text-white/g, '') + " text-slate-300";
+        }
+      });
+    }
+
+    function adjustFontSize(delta) {
+      appState.baseFontSize = Math.min(Math.max(appState.baseFontSize + delta, 11), 16);
+      document.documentElement.style.setProperty('--exam-base-font-size', `${appState.baseFontSize}px`);
+      document.getElementById('fontSizeDisplay').innerText = `${appState.baseFontSize}px`;
+    }
+
+    function adjustZoom(delta) {
+      appState.zoom = Math.min(Math.max(appState.zoom + delta, 0.5), 1.8);
+      applyZoom();
+    }
+
+    function fitZoomWidth() {
+      const container = document.getElementById('viewportCanvas');
+      if (!container || container.clientWidth < 300) return;
+      const targetZoom = (container.clientWidth - 40) / 794;
+      appState.zoom = Math.min(Math.max(targetZoom, 0.75), 1.25);
+      applyZoom();
+    }
+
+    function applyZoom() {
+      const zoomContainer = document.getElementById('paperZoomContainer');
+      if (zoomContainer) {
+        zoomContainer.style.transform = `scale(${appState.zoom})`;
+      }
+      const readout = document.getElementById('zoomReadout');
+      if (readout) readout.innerText = `${Math.round(appState.zoom * 100)}%`;
+    }
+
+    function toggleLiveEdit() {
+      if (appState.isCustomerMode) return;
+      appState.isEditMode = !appState.isEditMode;
+      const btn = document.getElementById('editToggleBtn');
+      if (appState.isEditMode) {
+        btn.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Edit: ON';
+        btn.className = "px-2 py-1 rounded font-bold text-xs bg-emerald-600 text-white transition flex items-center gap-1 shadow-sm";
+      } else {
+        btn.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Edit: OFF';
+        btn.className = "px-2 py-1 rounded font-medium text-xs bg-slate-700 text-slate-300 hover:bg-slate-600 transition flex items-center gap-1";
+      }
+      document.querySelectorAll('[contenteditable]').forEach(el => el.setAttribute('contenteditable', appState.isEditMode ? 'true' : 'false'));
+    }
+
+    function openSecurityModal() {
+      document.getElementById('securityModal').classList.remove('hidden');
+      generateAdminLinks();
+    }
+
+    function closeSecurityModal() {
+      document.getElementById('securityModal').classList.add('hidden');
+    }
+
+    function renderQrInto(containerId, size = 44) {
+      const target = document.getElementById(containerId);
+      if (!target) return;
+      target.innerHTML = '';
+
+      const payload = `LICENSED-EXAM: ${appState.recipientId} | FACULTY: Sultan Teaches | TOKEN: ${appState.securityToken} | CODE: 55/6/1`;
+
+      if (typeof QRCode !== 'undefined') {
+        try {
+          new QRCode(target, {
+            text: payload,
+            width: size,
+            height: size,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.M
+          });
+          return;
+        } catch (e) {}
+      }
+
+      target.innerHTML = `
+        <svg viewBox="0 0 33 33" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+          <rect width="33" height="33" fill="#ffffff"/>
+          <path fill="#000000" d="M2 2h7v7H2z M3 3v5h5V3H3z M24 2h7v7h-7z M25 3v5h5V3h-5z M2 24h7v7H2z M3 25v5h5v-5H3z M12 3h2v2h-2z M15 2h3v1h-3z M19 3h2v3h-2z M11 15h4v2h-4z M17 15h2v3h-2z M21 15h3v2h-3z M12 19h3v2h-3z M16 19h2v1h-2z M20 18h2v2h-2z M24 19h2v2h-2z M13 23h3v2h-3z M18 22h3v3h-3z M23 23h2v2h-2z M12 27h2v2h-2z M16 26h2v3h-2z M20 27h4v2h-4z"/>
+        </svg>
+      `;
+    }
+
+    function generateQrCodesAcrossPaper() {
+      setTimeout(() => {
+        renderQrInto('qpQrCodeBox', 44);
+        renderQrInto('msQrCodeBox', 44);
+      }, 50);
+    }
+
+    function getCurrentDataset() {
+      return CHAPTER_6_SEEDED_DATA[1]['set1'];
+    }
+
+    function renderCurrentPaper() {
+      const currentSet = getCurrentDataset();
+      const qpContainer = document.getElementById('qpRenderContainer');
+      const msContainer = document.getElementById('msRenderContainer');
+
+      const invisibleWatermark = encodeInvisibleString(appState.recipientId);
+
+      const microprintLine = `
+        <div class="microprint-rule" title="Microprinted Security Rule">
+          ${Array(8).fill(`AUTH-VERIFIED-EXAM-TOKEN-${appState.securityToken}-LICENSED-TO-${appState.recipientId}-SULTAN-TEACHES`).join(' • ')}
+        </div>
+      `;
+
+      const pantographHTML = `
+        <div class="pantograph-overlay" style="display: ${appState.pantographEnabled ? 'flex' : 'none'};">
+          <div class="pantograph-warning">LICENSED ORIGINAL</div>
+          <div class="pantograph-warning">SULTAN TEACHES</div>
+          <div class="pantograph-warning">DO NOT REDISTRIBUTE</div>
+        </div>
+      `;
+
+      const watermarkHTML = `
+        <div class="watermark-overlay" style="display: ${appState.watermarkEnabled ? 'flex' : 'none'};">
+          <div class="watermark-line">LICENSED RECIPIENT: ${appState.recipientId} • SULTAN TEACHES</div>
+          <div class="watermark-line">TOKEN: ${appState.securityToken} • ₹10 BOARD BOOSTER SERIES</div>
+          <div class="watermark-line">VERIFIED ORIGINAL PHYSICS EVALUATION • STRICT COPYRIGHT</div>
+        </div>
+      `;
+
+      const editableAttr = appState.isCustomerMode ? 'false' : (appState.isEditMode ? 'true' : 'false');
+
+      // 1. RENDER QUESTION PAPER
+      let qpHTML = `
+        <article class="exam-sheet" id="qpSheet">
+          ${pantographHTML}
+          ${watermarkHTML}
+          
+          <div class="sheet-body">
+            ${microprintLine}
+
+            <!-- Header Block -->
+            <div class="pb-1 mb-1">
+              <div class="flex justify-between items-start text-xs text-black">
+                <div class="space-y-0.5">
+                  <div class="font-bold flex items-center text-xs">
+                    <span>Roll No. / अनुक्रमांक :</span>
+                    <span class="inline-flex border border-black ml-2 text-center font-mono">
+                      ${[...Array(8)].map(() => `<span class="w-5 h-5 border-r border-black flex items-center justify-center font-bold" contenteditable="${editableAttr}">&nbsp;</span>`).join('')}
+                    </span>
+                  </div>
+                  <div class="text-[11px] text-black font-medium">Please check that this question paper contains <strong>2 printed pages</strong>.</div>
+                  <div class="text-[11px] text-black font-medium">Please check that this question paper contains <strong>12 questions</strong>.</div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <div class="qr-security-box" onclick="openSecurityModal()" title="Anti-Piracy Verification">
+                    <div id="qpQrCodeBox" class="qr-canvas-holder"></div>
+                    <div class="text-[9px] leading-tight text-left">
+                      <div class="font-bold uppercase tracking-wider text-black flex items-center gap-1">
+                        <i class="fa-solid fa-shield-halved text-[8px] text-emerald-600"></i> LICENSED
+                      </div>
+                      <div class="text-[8px] text-gray-700 font-mono">${appState.securityToken.split('-')[3] || '9842F'}</div>
+                      <div class="text-[7.5px] text-gray-500">Scan to Verify</div>
+                    </div>
+                  </div>
+
+                  <div class="text-right">
+                    <div class="font-bold text-xs tracking-wider">Series : ${currentSet.series}</div>
+                    <div class="font-bold text-xs bg-black text-white px-2.5 py-0.5 inline-block my-0.5 font-mono">Q.P. Code ${currentSet.code}</div>
+                    <div class="text-[10px] text-black font-medium">Candidates must write the Q.P. Code on the answer-book.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            ${microprintLine}
+
+            <!-- Title Banner -->
+            <div class="my-1 text-center pb-1">
+              <h4 class="text-xs font-bold uppercase tracking-widest font-serif text-slate-800">
+                SULTAN TEACHES • ₹10 BOARD BOOSTER ASSESSMENT
+              </h4>
+              <h2 class="text-lg font-bold uppercase tracking-wide font-serif my-0.5 text-black">
+                PHYSICS (THEORY) — CLASS XII (CHAPTER 6: ELECTROMAGNETIC INDUCTION)
+              </h2>
+              <div class="flex justify-between font-bold text-xs border-t border-b border-black py-0.5 mt-0.5 px-3">
+                <span>Time Allowed : ${currentSet.timeAllowed}</span>
+                <span>Maximum Marks : ${currentSet.maxMarks}</span>
+              </div>
+            </div>
+
+            <!-- General Instructions -->
+            <div class="bg-gray-50 border border-black p-1.5 my-1 text-xs text-black leading-snug">
+              <p class="font-bold uppercase tracking-wider mb-0.5 text-center text-xs">General Instructions / सामान्य निर्देश :</p>
+              <ul class="list-disc pl-5 space-y-0.5 text-[11px]">
+                <li>There are <strong>12 questions</strong> in all. All questions are compulsory.</li>
+                <li>This question paper has four sections: <strong>Section A</strong> (Q1–Q5: 1 Mark each), <strong>Section B</strong> (Q6–Q8: 2 Marks each), <strong>Section C</strong> (Q9–Q11: 3 Marks each), and <strong>Section D</strong> (Q12: 5 Marks).</li>
+                <li>Internal choice is provided in Q8 of Section B, Q11 of Section C, and Q12 of Section D.</li>
+                <li>Use of calculators is not permitted. Standard log tables may be used.</li>
+              </ul>
+              <div class="grid grid-cols-3 gap-x-2 gap-y-0.5 text-[10px] mt-1 font-mono pt-1 border-t border-dashed border-gray-400 font-semibold">
+                <span>c = 3 × 10⁸ m/s</span>
+                <span>μ₀ = 4π × 10⁻⁷ T·m/A</span>
+                <span>e = 1.6 × 10⁻¹⁹ C</span>
+                <span>m<sub>e</sub> = 9.1 × 10⁻³¹ kg</span>
+                <span>ε₀ = 8.854 × 10⁻¹² C²N⁻¹m⁻²</span>
+                <span>1 Wb = 1 T·m² = 1 V·s</span>
+              </div>
+            </div>
+
+            ${microprintLine}
+
+            <!-- Sections Container -->
+            <div class="mt-1 text-black">
+              ${currentSet.sections.map(sec => `
+                <div class="section-banner">${sec.title}</div>${sec.questions.map((q) => {
+                  let questionText = q.text;
+                  if (q.qNum === 1) {
+                    const words = questionText.split(' ');
+                    if (words.length > 2) {
+                      words[1] = words[1] + invisibleWatermark;
+                      questionText = words.join(' ');
+                    }
+                  }
+                  return `
+                    <div class="question-block" contenteditable="${editableAttr}">
+                      <span class="marks-pill font-bold">[${q.marks}]</span>
+                      <span class="q-badge">${q.qNum}.</span>
+                      <span>${questionText.replace(/\n/g, '<br>')}</span>
+
+                      ${q.options ? `
+                        <div class="mcq-options">
+                          ${q.options.map(opt => `<div>${opt}</div>`).join('')}
+                        </div>
+                      ` : ''}
+
+                      ${q.hasOr ? `
+                        <div class="or-divider">OR</div>
+                        <div class="mt-1">
+                          ${q.orText.replace(/\n/g, '<br>')}
+                        </div>
+                      ` : ''}
+                    </div>
+                  `;
+                }).join('')}
+              `).join('')}
+            </div>
+
+          </div>
+
+          <!-- Footer -->
+          <div>
+            ${microprintLine}
+            <div class="text-center font-bold my-0.5 text-[11px] tracking-wider">
+              --- END OF QUESTION PAPER / प्रश्न-पत्र समाप्त ---
+            </div>
+            <div class="border-t border-black pt-0.5 flex justify-between text-[10px] font-bold text-black font-mono">
+              <span>${currentSet.code}</span>
+              <span>Page 1 of 1</span>
+              <span class="text-gray-800">License: ${appState.recipientId} • Sultan Teaches All Rights Reserved</span>
+            </div>
+            ${microprintLine}
+          </div>
+        </article>
+      `;
+      qpContainer.innerHTML = qpHTML;
+
+      // 2. RENDER MARKING SCHEME
+      let msRows = [];
+      currentSet.sections.forEach(sec => {
+        sec.questions.forEach(q => {
+          msRows.push({
+            qNum: `Q.${q.qNum}`,
+            solution: q.solution,
+            stepMarks: q.stepMarks,
+            totalMarks: `${q.marks} M`
+          });
+        });
+      });
+
+      let msHTML = `
+        <article class="exam-sheet auto-height" id="msSheet">
+          ${pantographHTML}
+          ${watermarkHTML}
+          
+          <div class="sheet-body">
+            ${microprintLine}
+
+            <div class="pb-1 mb-1 text-center relative">
+              <div class="absolute right-0 top-0 qr-security-box" onclick="openSecurityModal()" title="View Security Certificate">
+                <div id="msQrCodeBox" class="qr-canvas-holder"></div>
+                <div class="text-[8px] leading-tight text-left">
+                  <div class="font-bold text-red-700">PROTECTED</div>
+                  <div class="text-[7.5px] text-gray-500">Official Key</div>
+                </div>
+              </div>
+
+              <div class="bg-red-700 text-white font-bold text-xs uppercase tracking-widest py-0.5 px-3 inline-block rounded-sm mb-1">
+                Strictly Confidential — (Official Evaluator Key)
+              </div>
+              <h3 class="text-base font-bold uppercase tracking-wider font-serif">
+                SULTAN TEACHES • STEP-BY-STEP EVALUATION RUBRIC
+              </h3>
+              <h2 class="text-lg font-bold uppercase font-serif">
+                PHYSICS CLASS XII : CHAPTER 6 (EMI) MARKING SCHEME
+              </h2>
+              <div class="flex justify-between items-center text-xs font-bold border-t border-b border-black py-0.5 mt-1 px-2 font-mono">
+                <span>Q.P. CODE: ${currentSet.code}</span>
+                <span>SERIES: ${currentSet.series}</span>
+                <span>MAX. MARKS: ${currentSet.maxMarks}</span>
+              </div>
+            </div>
+
+            ${microprintLine}
+
+            <div class="bg-amber-50/50 border border-amber-800 p-1.5 mb-1.5 text-[9.5px] leading-tight">
+              <strong>Evaluation Guidelines &amp; Step Value Points:</strong>
+              <ul class="list-disc pl-4 space-y-0.5">
+                <li>Award full marks for physically valid alternative deductions.</li>
+                <li>Deduct ½ mark once for missing or incorrect physical unit in final numerical calculations.</li>
+                <li>Registered buyer token: <strong>${appState.securityToken}</strong>. License: <strong>${appState.recipientId}</strong>.</li>
+              </ul>
+            </div>
+
+            <table class="ms-table">
+              <thead>
+                <tr>
+                  <th style="width: 8%;">Q. No.</th>
+                  <th style="width: 70%;">Expected Value Points / Detailed Solution Steps</th>
+                  <th style="width: 14%;">Step Marks</th>
+                  <th style="width: 8%;">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${msRows.map(row => `
+                  <tr>
+                    <td class="text-center font-bold font-mono text-xs">
+                      <div>${row.qNum}</div>
+                    </td>
+                    <td>
+                      <div class="whitespace-pre-line text-[11.5px]">${row.solution}</div>
+                    </td>
+                    <td class="text-center text-[10px] font-medium">
+                      <span class="step-mark-badge">${row.stepMarks}</span>
+                    </td>
+                    <td class="text-center font-bold text-xs">${row.totalMarks}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="border-t border-black pt-1 mt-1 flex justify-between text-[9px] font-bold font-mono">
+            <span>${currentSet.code} (MS)</span>
+            <span>License: ${appState.recipientId}</span>
+            <span>Sultan Teaches • All Rights Reserved</span>
+          </div>
+          ${microprintLine}
+        </article>
+      `;
+      msContainer.innerHTML = msHTML;
+
+      generateQrCodesAcrossPaper();
+    }
+
+    /**
+     * URL PARAMETER DETECTION & ACCESS TOKEN VALIDATION
+     */
+    function detectCustomerModeFromURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('access_token');
+      const order = urlParams.get('order') || urlParams.get('order_id') || urlParams.get('payment_id');
+      const buyer = urlParams.get('name') || urlParams.get('buyer') || urlParams.get('buyer_name');
+      const view = urlParams.get('view') || 'qp';
+      const autoPrint = urlParams.get('auto') || urlParams.get('autoprint');
+
+      // If token matches or order is passed, activate buyer license mode
+      if (token === SECRET_ACCESS_TOKEN || order || buyer) {
+        enableCustomerMode({
+          orderId: order || 'ORD-' + Math.floor(10000 + Math.random()*90000),
+          buyerName: buyer || 'Licensed Student',
+          view: view,
+          autoPrint: autoPrint === 'true' || autoPrint === '1'
+        });
+      }
+    }
+
+    function enableCustomerMode(custConfig) {
+      appState.isCustomerMode = true;
+      appState.buyerName = custConfig.buyerName;
+      appState.orderId = custConfig.orderId;
+      appState.recipientId = `LIC-${custConfig.orderId.toUpperCase()}-${custConfig.buyerName.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 10)}`;
+      appState.purchasedView = custConfig.view;
+
+      // Hide admin header, show customer top bar
+      document.getElementById('adminHeaderBar').classList.add('hidden');
+      document.getElementById('customerHeaderBar').classList.remove('hidden');
+
+      // Populate buyer name & license badge
+      document.getElementById('custRecipientName').innerText = custConfig.buyerName;
+      document.getElementById('custLicenseBadge').innerText = appState.recipientId;
+
+      // Security: if user only purchased QP, hide Marking Scheme & Combo buttons
+      if (custConfig.view === 'qp') {
+        const msBtn = document.getElementById('custBtnMS');
+        const bothBtn = document.getElementById('custBtnBoth');
+        if (msBtn) msBtn.style.display = 'none';
+        if (bothBtn) bothBtn.style.display = 'none';
+      } else if (custConfig.view === 'ms') {
+        const qpBtn = document.getElementById('custBtnQP');
+        const bothBtn = document.getElementById('custBtnBoth');
+        if (qpBtn) qpBtn.style.display = 'none';
+        if (bothBtn) bothBtn.style.display = 'none';
+      }
+
+      renderCurrentPaper();
+      switchMainView(custConfig.view);
+
+      if (custConfig.autoPrint) {
+        setTimeout(() => {
+          triggerInstantCustomerDownload();
+        }, 800);
+      }
+    }
+
+    function triggerInstantCustomerDownload() {
+      window.print();
+    }
+
+    function generateAdminLinks() {
+      const cleanUrl = window.location.origin + window.location.pathname;
+      document.getElementById('linkOutputQP').innerText = 
+        `${cleanUrl}?view=qp&access_token=${SECRET_ACCESS_TOKEN}&auto=1&order={payment_id}&name={buyer_name}`;
+      document.getElementById('linkOutputMS').innerText = 
+        `${cleanUrl}?view=ms&access_token=${SECRET_ACCESS_TOKEN}&auto=1&order={payment_id}&name={buyer_name}`;
+      document.getElementById('linkOutputBoth').innerText = 
+        `${cleanUrl}?view=both&access_token=${SECRET_ACCESS_TOKEN}&auto=1&order={payment_id}&name={buyer_name}`;
+    }
+
+    /**
+     * INITIALIZATION GATEWAY (SECURITY LOCKOUT)
+     */
+    function init() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('access_token');
+      const isAdminPreview = urlParams.get('admin') === '1';
+
+      // ========================================================
+      // SECURITY GATE: Deny access if token is missing/wrong
+      // ========================================================
+      if (token !== SECRET_ACCESS_TOKEN && !isAdminPreview) {
+        document.body.innerHTML = `
+          <div style="min-height:100vh; background:#070e1b; color:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:24px; font-family:'Plus Jakarta Sans',sans-serif;">
+            <div style="width:64px; height:64px; border-radius:50%; background:rgba(239,68,68,0.15); border:1px solid #ef4444; color:#ef4444; display:flex; align-items:center; justify-content:center; font-size:26px; margin-bottom:18px;">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <span style="background:rgba(56,189,248,0.15); border:1px solid rgba(56,189,248,0.3); color:#38bdf8; font-size:11px; font-weight:800; letter-spacing:1px; text-transform:uppercase; padding:3px 10px; border-radius:999px; margin-bottom:10px;">
+              SULTAN TEACHES SECURE VAULT
+            </span>
+            <h2 style="font-size:26px; font-weight:800; margin:0 0 10px 0;">Purchase License Required</h2>
+            <p style="font-size:14px; color:#94a3b8; max-width:480px; margin:0 0 24px 0; line-height:1.6;">
+              This assessment paper and evaluator marking scheme require an active ₹10 purchase license to generate your watermarked PDF.
+            </p>
+            <a href="https://yourblog.blogspot.com/p/10-board-booster-series.html" style="background:linear-gradient(135deg,#2563eb,#1d4ed8); color:#ffffff; font-weight:800; font-size:14px; text-decoration:none; padding:12px 26px; border-radius:10px; box-shadow:0 4px 14px rgba(37,99,235,0.35);">
+              ← Get Paper for ₹10 on Sultan Teaches
+            </a>
+          </div>
+        `;
+        return;
+      }
+
+      // Valid access granted
+      detectCustomerModeFromURL();
+      if (!appState.isCustomerMode) {
+        renderCurrentPaper();
+      }
+      fitZoomWidth();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+    window.addEventListener('resize', fitZoomWidth);
+  </script>
+</body>
+</html>
